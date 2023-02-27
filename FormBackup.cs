@@ -181,7 +181,7 @@ namespace RapBackup
 				string fn = Path.GetFileName(d);
 				string p = $@"{path}\{fn}";
 				TreeNode tn = node.Nodes.Add(fn);
-				tn.Checked = (r.dirList.Count == 0) || (r.dirList.IndexOf(NodesPath(tn)) > 0);
+				tn.Checked = (r.dirList.Count == 0) || (r.dirList.IndexOf(NodesPath(tn)) >= 0);
 				FillTree(r, tn, p);
 			}
 			if (!node.Checked)
@@ -224,7 +224,7 @@ namespace RapBackup
 			foreach (string e in extList)
 			{
 				ListViewItem lvItem = new ListViewItem(new[] { e });
-				lvItem.Checked = (r.extList.Count == 0) || (r.extList.IndexOf(lvItem.Text) > 0);
+				lvItem.Checked = (r.extList.Count == 0) || (r.extList.IndexOf(lvItem.Text) >= 0);
 				lvExt.Items.Add(lvItem);
 			}
 		}
