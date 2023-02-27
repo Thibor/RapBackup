@@ -57,6 +57,8 @@ namespace RapBackup
 				}
 			}
 			progressBar.Value = 0;
+			UpdateInfo(tbName.Text);
+			toolStripStatusLabel3.Text = "Backup completed";
 		}
 
 		void ClickDeleteName()
@@ -109,7 +111,7 @@ namespace RapBackup
 			{
 				node.Checked = nodeChecked;
 				if (node.Nodes.Count > 0)
-					this.CheckAllChildNodes(node, nodeChecked);
+					CheckAllChildNodes(node, nodeChecked);
 			}
 		}
 
@@ -127,15 +129,21 @@ namespace RapBackup
 			return files.Length;
 		}
 
+		void UpdateInfo(string name)
+		{
+			int cb = CountBackups(name, out DateTime dt);
+			toolStripStatusLabel1.Text = dt == DateTime.MinValue ? string.Empty : dt.ToString("yyyy-MM-dd hh:mm:ss");
+			toolStripStatusLabel2.Text = $"Backups {cb}";
+			toolStripStatusLabel3.Text = String.Empty;
+		}
+
 		void RecSelected(string name)
 		{
 			CRec r = recList.GetRec(name);
 			if (r == null)
 				r = new CRec();
 			RecToSettings(r);
-			int cb = CountBackups(name,out DateTime dt);
-			toolStripStatusLabel1.Text = dt == DateTime.MinValue ? string.Empty : dt.ToString("yyyy-MM-dd hh:mm:ss");
-			toolStripStatusLabel2.Text = $"Backups {cb}";
+			UpdateInfo(name);
 		}
 
 		void UpdateList()
