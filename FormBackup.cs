@@ -272,6 +272,7 @@ namespace RapBackup
 		{
 			string name = Path.GetFileName(folder);
 			CRec r = new CRec(name) { folder = folder };
+			r.name = recList.CreateUniqueName(r);
 			RecToSettings(r);
 			recList.Add(r);
 			recList.SaveToIni();

@@ -78,6 +78,26 @@ namespace RapBackup
 			}
 		}
 
+		public bool NameExists(CRec rec, string name)
+		{
+			if (string.IsNullOrEmpty(name))
+				return true;
+			foreach (CRec r in this)
+				if ((r != rec) && (r.name == name))
+					return true;
+			return false;
 		}
+
+		public string CreateUniqueName(CRec rec)
+		{
+			string name = rec.name;
+			string result = name;
+			int i = 1;
+			while (NameExists(rec, result))
+				result = $"{name} ({++i})";
+			return result.Trim();
+		}
+
+	}
 
 }

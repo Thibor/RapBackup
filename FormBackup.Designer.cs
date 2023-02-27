@@ -275,6 +275,7 @@
 			// 
 			// statusStrip
 			// 
+			this.statusStrip.Font = new System.Drawing.Font("Segoe UI", 10F);
 			this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusLabel1,
             this.toolStripStatusLabel2,
@@ -297,6 +298,8 @@
 			// 
 			// toolStripStatusLabel3
 			// 
+			this.toolStripStatusLabel3.Font = new System.Drawing.Font("Segoe UI", 10F);
+			this.toolStripStatusLabel3.ForeColor = System.Drawing.Color.DarkRed;
 			this.toolStripStatusLabel3.Name = "toolStripStatusLabel3";
 			this.toolStripStatusLabel3.Size = new System.Drawing.Size(0, 17);
 			// 
