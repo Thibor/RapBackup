@@ -3,12 +3,8 @@
 ################################################################################
 .gitignore
 .vs/
-RapChessGui/obj/
-RapChessGui/Debug/
-RapChessGui/Release/Tournament.pgn
-RapChessGui/Release/tournament.txt
-RapChessGui/Release/RapChessGui.exe.config
-RapChessGui/Release/Ini/*.ini
+*/obj/
+*/Debug/
 *.pdb
 *.pdb
 *.his
