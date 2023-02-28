@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,9 +10,17 @@ namespace RapBackup
 	class CRec
 	{
 		public string name = string.Empty;
-		public string folder=string.Empty;
+		public string folder = string.Empty;
 		public List<string> dirList = new List<string>();
 		public List<string> extList = new List<string>();
+
+		public string Root
+		{
+			get
+			{
+				return Path.GetFileName(folder);
+			}
+		}
 
 		public CRec()
 		{
@@ -27,7 +35,7 @@ namespace RapBackup
 		public void SaveToIni()
 		{
 			FormBackup.ini.DeleteKey($"name>{name}");
-			FormBackup.ini.Write($"name>{name}>folder",folder);
+			FormBackup.ini.Write($"name>{name}>folder", folder);
 			FormBackup.ini.Write($"name>{name}>ext", extList);
 			foreach (string d in dirList)
 				FormBackup.ini.Write($"name>{name}>dir>{d}");
@@ -40,14 +48,64 @@ namespace RapBackup
 			dirList = FormBackup.ini.ReadKeyList($"name>{name}>dir");
 		}
 
+		string CreatePath(string path)
+		{
+			return $@"{folder}\{path}";
+		}
+
+		public bool ExtOk(string ext)
+		{
+			foreach (string e in extList)
+				if (ext == e)
+					return true;
+			return false;
+		}
+
+		public bool PathOk(string path)
+		{
+			string ext = Path.GetExtension(path);
+			if (!ExtOk(ext))
+				return false;
+			path = Path.GetDirectoryName(path);
+			if (path == folder)
+				return true;
+			foreach (string p in dirList)
+				if (path == CreatePath(p))
+					return true;
+			return false;
+		}
+
+		public string CreateShortFile(string path)
+		{
+			if (path == folder)
+				return string.Empty;
+			return path.Substring(folder.Length + 1);
+			/*string root = Path.GetFileName(folder);
+			if (string.IsNullOrEmpty(root))
+				return path;
+			else
+				return root + path;*/
+		}
+
+		public string CreateShortDir(string path)
+		{
+			path = Path.GetDirectoryName(path);
+			return CreateShortFile(path);
+			/*path = CreateShortFile(path);
+			int i = path.LastIndexOf('\\');
+			if (i < 0)
+				return path;
+			return path.Substring(0,i);*/
+		}
+
 	}
 
-	class CRecList:List<CRec>
+	class CRecList : List<CRec>
 	{
 
 		public CRecList()
 		{
-			
+
 		}
 
 		public CRec GetRec(string name)
@@ -63,7 +121,6 @@ namespace RapBackup
 			FormBackup.ini.DeleteKey("name");
 			foreach (CRec rec in this)
 				rec.SaveToIni();
-			FormBackup.ini.Save();
 		}
 
 		public void LoadFromIni()

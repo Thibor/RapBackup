@@ -31,7 +31,7 @@
 			this.components = new System.ComponentModel.Container();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormBackup));
 			this.panel1 = new System.Windows.Forms.Panel();
-			this.listView = new System.Windows.Forms.ListView();
+			this.lvBackups = new System.Windows.Forms.ListView();
 			this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.deleteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -40,6 +40,9 @@
 			this.treeView = new System.Windows.Forms.TreeView();
 			this.lvExt = new System.Windows.Forms.ListView();
 			this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+			this.contextMenuStrip2 = new System.Windows.Forms.ContextMenuStrip(this.components);
+			this.checkAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.uncheckAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.panel3 = new System.Windows.Forms.Panel();
 			this.progressBar = new System.Windows.Forms.ProgressBar();
 			this.bBackup = new System.Windows.Forms.Button();
@@ -55,11 +58,12 @@
 			this.statusStrip = new System.Windows.Forms.StatusStrip();
 			this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
 			this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
-			this.toolStripStatusLabel3 = new System.Windows.Forms.ToolStripStatusLabel();
+			this.sslInfo = new System.Windows.Forms.ToolStripStatusLabel();
 			this.panel1.SuspendLayout();
 			this.contextMenuStrip1.SuspendLayout();
 			this.panel2.SuspendLayout();
 			this.panDirExt.SuspendLayout();
+			this.contextMenuStrip2.SuspendLayout();
 			this.panel3.SuspendLayout();
 			this.panel5.SuspendLayout();
 			this.panel4.SuspendLayout();
@@ -69,30 +73,30 @@
 			// 
 			// panel1
 			// 
-			this.panel1.Controls.Add(this.listView);
+			this.panel1.Controls.Add(this.lvBackups);
 			this.panel1.Dock = System.Windows.Forms.DockStyle.Left;
 			this.panel1.Location = new System.Drawing.Point(0, 24);
 			this.panel1.Name = "panel1";
 			this.panel1.Size = new System.Drawing.Size(211, 401);
 			this.panel1.TabIndex = 0;
 			// 
-			// listView
+			// lvBackups
 			// 
-			this.listView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+			this.lvBackups.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader1});
-			this.listView.ContextMenuStrip = this.contextMenuStrip1;
-			this.listView.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.listView.FullRowSelect = true;
-			this.listView.HideSelection = false;
-			this.listView.Location = new System.Drawing.Point(0, 0);
-			this.listView.MultiSelect = false;
-			this.listView.Name = "listView";
-			this.listView.Size = new System.Drawing.Size(211, 401);
-			this.listView.Sorting = System.Windows.Forms.SortOrder.Ascending;
-			this.listView.TabIndex = 0;
-			this.listView.UseCompatibleStateImageBehavior = false;
-			this.listView.View = System.Windows.Forms.View.Details;
-			this.listView.SelectedIndexChanged += new System.EventHandler(this.listView_SelectedIndexChanged);
+			this.lvBackups.ContextMenuStrip = this.contextMenuStrip1;
+			this.lvBackups.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.lvBackups.FullRowSelect = true;
+			this.lvBackups.HideSelection = false;
+			this.lvBackups.Location = new System.Drawing.Point(0, 0);
+			this.lvBackups.MultiSelect = false;
+			this.lvBackups.Name = "lvBackups";
+			this.lvBackups.Size = new System.Drawing.Size(211, 401);
+			this.lvBackups.Sorting = System.Windows.Forms.SortOrder.Ascending;
+			this.lvBackups.TabIndex = 0;
+			this.lvBackups.UseCompatibleStateImageBehavior = false;
+			this.lvBackups.View = System.Windows.Forms.View.Details;
+			this.lvBackups.SelectedIndexChanged += new System.EventHandler(this.listView_SelectedIndexChanged);
 			// 
 			// columnHeader1
 			// 
@@ -148,6 +152,7 @@
 			this.lvExt.CheckBoxes = true;
 			this.lvExt.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader2});
+			this.lvExt.ContextMenuStrip = this.contextMenuStrip2;
 			this.lvExt.Dock = System.Windows.Forms.DockStyle.Right;
 			this.lvExt.FullRowSelect = true;
 			this.lvExt.HideSelection = false;
@@ -164,6 +169,28 @@
 			// 
 			this.columnHeader2.Text = "Extensions";
 			this.columnHeader2.Width = 100;
+			// 
+			// contextMenuStrip2
+			// 
+			this.contextMenuStrip2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.checkAllToolStripMenuItem,
+            this.uncheckAllToolStripMenuItem});
+			this.contextMenuStrip2.Name = "contextMenuStrip2";
+			this.contextMenuStrip2.Size = new System.Drawing.Size(136, 48);
+			// 
+			// checkAllToolStripMenuItem
+			// 
+			this.checkAllToolStripMenuItem.Name = "checkAllToolStripMenuItem";
+			this.checkAllToolStripMenuItem.Size = new System.Drawing.Size(135, 22);
+			this.checkAllToolStripMenuItem.Text = "Check all";
+			this.checkAllToolStripMenuItem.Click += new System.EventHandler(this.checkAllToolStripMenuItem_Click);
+			// 
+			// uncheckAllToolStripMenuItem
+			// 
+			this.uncheckAllToolStripMenuItem.Name = "uncheckAllToolStripMenuItem";
+			this.uncheckAllToolStripMenuItem.Size = new System.Drawing.Size(135, 22);
+			this.uncheckAllToolStripMenuItem.Text = "Uncheck all";
+			this.uncheckAllToolStripMenuItem.Click += new System.EventHandler(this.uncheckAllToolStripMenuItem_Click);
 			// 
 			// panel3
 			// 
@@ -279,7 +306,7 @@
 			this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusLabel1,
             this.toolStripStatusLabel2,
-            this.toolStripStatusLabel3});
+            this.sslInfo});
 			this.statusStrip.Location = new System.Drawing.Point(0, 425);
 			this.statusStrip.Name = "statusStrip";
 			this.statusStrip.Size = new System.Drawing.Size(800, 22);
@@ -296,12 +323,12 @@
 			this.toolStripStatusLabel2.Name = "toolStripStatusLabel2";
 			this.toolStripStatusLabel2.Size = new System.Drawing.Size(0, 17);
 			// 
-			// toolStripStatusLabel3
+			// sslInfo
 			// 
-			this.toolStripStatusLabel3.Font = new System.Drawing.Font("Segoe UI", 10F);
-			this.toolStripStatusLabel3.ForeColor = System.Drawing.Color.DarkRed;
-			this.toolStripStatusLabel3.Name = "toolStripStatusLabel3";
-			this.toolStripStatusLabel3.Size = new System.Drawing.Size(0, 17);
+			this.sslInfo.Font = new System.Drawing.Font("Segoe UI", 10F);
+			this.sslInfo.ForeColor = System.Drawing.Color.DarkRed;
+			this.sslInfo.Name = "sslInfo";
+			this.sslInfo.Size = new System.Drawing.Size(0, 17);
 			// 
 			// FormBackup
 			// 
@@ -319,6 +346,7 @@
 			this.contextMenuStrip1.ResumeLayout(false);
 			this.panel2.ResumeLayout(false);
 			this.panDirExt.ResumeLayout(false);
+			this.contextMenuStrip2.ResumeLayout(false);
 			this.panel3.ResumeLayout(false);
 			this.panel5.ResumeLayout(false);
 			this.panel5.PerformLayout();
@@ -335,7 +363,7 @@
 		#endregion
 
 		private System.Windows.Forms.Panel panel1;
-		private System.Windows.Forms.ListView listView;
+		private System.Windows.Forms.ListView lvBackups;
 		private System.Windows.Forms.ColumnHeader columnHeader1;
 		private System.Windows.Forms.Panel panel2;
 		private System.Windows.Forms.Panel panDirExt;
@@ -359,7 +387,10 @@
 		private System.Windows.Forms.StatusStrip statusStrip;
 		private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
 		private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel2;
-		private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel3;
+		private System.Windows.Forms.ToolStripStatusLabel sslInfo;
+		private System.Windows.Forms.ContextMenuStrip contextMenuStrip2;
+		private System.Windows.Forms.ToolStripMenuItem checkAllToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem uncheckAllToolStripMenuItem;
 	}
 }
 

@@ -13,31 +13,38 @@ namespace RapBackup
 {
 	public partial class FormOptions : Form
 	{
-		public static string des;
+		static string des;
+
+		public static string Des
+		{
+			get
+			{
+				if(string.IsNullOrEmpty(des))
+					return AppContext.BaseDirectory;
+				if (Directory.Exists(des))
+					return des;
+				else
+					return AppContext.BaseDirectory;
+			}
+		}
 
 		public FormOptions()
 		{
 			InitializeComponent();
-			CreateDir("Backup");
-			des = $@"{AppContext.BaseDirectory}\Backup";
 			LoadFromIni();
-			tbDes.Text = des;
+			tbDes.Text = Des;
 		}
+
+
 
 		void SaveToIni()
 		{
-			FormBackup.ini.Write("des",des);
+			FormBackup.ini.Write("des",Des);
 		}
 
 		void LoadFromIni()
 		{
-			des = FormBackup.ini.Read("des",des);
-		}
-
-		void CreateDir(string dir)
-		{
-			if (!Directory.Exists(dir))
-				Directory.CreateDirectory(dir);
+			des = FormBackup.ini.Read("des",Des);
 		}
 
 		private void FormOptions_FormClosing(object sender, FormClosingEventArgs e)

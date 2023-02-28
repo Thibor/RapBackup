@@ -1,10 +1,12 @@
 ﻿################################################################################
 # Ten plik .gitignore został utworzony automatycznie przez Microsoft(R) Visual Studio.
 ################################################################################
-.gitignore
-.vs/
 obj/
 Debug/
+.vs/
+.gitignore
 *.pdb
 *.user
 *.config
+*.zip
+*.ini
