@@ -59,6 +59,7 @@
 			this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
 			this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
 			this.sslInfo = new System.Windows.Forms.ToolStripStatusLabel();
+			this.timer1 = new System.Windows.Forms.Timer(this.components);
 			this.panel1.SuspendLayout();
 			this.contextMenuStrip1.SuspendLayout();
 			this.panel2.SuspendLayout();
@@ -208,6 +209,7 @@
 			// 
 			this.progressBar.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.progressBar.Location = new System.Drawing.Point(66, 62);
+			this.progressBar.Maximum = 1000;
 			this.progressBar.Name = "progressBar";
 			this.progressBar.Size = new System.Drawing.Size(523, 32);
 			this.progressBar.TabIndex = 4;
@@ -330,6 +332,11 @@
 			this.sslInfo.Name = "sslInfo";
 			this.sslInfo.Size = new System.Drawing.Size(0, 17);
 			// 
+			// timer1
+			// 
+			this.timer1.Enabled = true;
+			this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+			// 
 			// FormBackup
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -392,6 +399,7 @@
 		private System.Windows.Forms.ContextMenuStrip contextMenuStrip2;
 		private System.Windows.Forms.ToolStripMenuItem checkAllToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem uncheckAllToolStripMenuItem;
+		private System.Windows.Forms.Timer timer1;
 	}
 }
 

@@ -3,6 +3,53 @@ using System.Collections.Generic;
 
 namespace RapBackup
 {
+
+	class CMsg
+	{
+		public double progress = 0;
+		public string msg = string.Empty;
+
+		public CMsg()
+		{
+
+		}
+
+		public CMsg(CMsg m)
+		{
+			Assign(m);
+		}
+
+		public void Assign(CMsg m)
+		{
+			progress = m.progress;
+			msg = m.msg;
+		}
+
+	}
+
+	class CSynMsg
+	{
+		private static CMsg msg = new CMsg();
+		private readonly object locker = new object();
+
+		public CMsg GetMsg()
+		{
+			lock (locker)
+			{
+				return new CMsg(msg);
+			}
+		}
+
+		public void SetMsg(CMsg m)
+		{
+			lock (locker)
+			{
+				msg.Assign(m);
+			}
+		}
+
+	}
+
 	class CRec
 	{
 		public string name = string.Empty;
@@ -14,7 +61,11 @@ namespace RapBackup
 		{
 			get
 			{
-				return Path.GetFileName(folder);
+				string root = Path.GetFileName(folder);
+				if (string.IsNullOrEmpty(root))
+					return string.Empty;
+				else
+					return $@"{root}\";
 			}
 		}
 
@@ -52,7 +103,7 @@ namespace RapBackup
 		public bool ExtOk(string ext)
 		{
 			foreach (string e in extList)
-				if (ext == e)
+				if (ext.ToLower() == e)
 					return true;
 			return false;
 		}

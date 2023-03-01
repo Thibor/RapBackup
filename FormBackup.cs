@@ -4,6 +4,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Collections.Generic;
 using System.Windows.Forms;
+using System.Threading.Tasks;
 using RapIni;
 
 namespace RapBackup
@@ -13,6 +14,8 @@ namespace RapBackup
 		string recName = string.Empty;
 		readonly List<string> fileList = new List<string>();
 		public Stopwatch timer = new Stopwatch();
+		CMsg msg = new CMsg();
+		CSynMsg synMsg = new CSynMsg();
 		readonly CRecList recList = new CRecList();
 		public static CRapIni ini = new CRapIni();
 		readonly FormOptions formOptions = new FormOptions();
@@ -36,34 +39,39 @@ namespace RapBackup
 			statusStrip.Update();
 		}
 
-		void ClickBackup()
+		async void ClickBackup(CRec r)
 		{
-			timer.Restart();
-			CRec r = GetRec();
-			progressBar.Maximum = fileList.Count;
-			string date = DateTime.Now.ToString("yyyy-MM-dd HHmmss");
-			string nameZip = $@"{FormOptions.Des}\{tbName.Text} {date}.zip";
-			using (FileStream zipFile = File.Open(nameZip, FileMode.Create))
-			using (var archive = new ZipArchive(zipFile, ZipArchiveMode.Create))
+			await Task.Run(() =>
 			{
-				for (int n = 0; n < fileList.Count; n++)
+				CMsg msg = new CMsg();
+				CSynMsg sm = new CSynMsg();
+				timer.Restart();
+				string date = DateTime.Now.ToString("yyyy-MM-dd HHmmss");
+				string nameZip = $@"{FormOptions.Des}\{tbName.Text} {date}.zip";
+				string root = r.Root;
+				using (FileStream zipFile = File.Open(nameZip, FileMode.Create))
+				using (var archive = new ZipArchive(zipFile, ZipArchiveMode.Create))
 				{
-					progressBar.Value = n;
-					string fn = fileList[n];
-					string ex = Path.GetExtension(fn);
-					if (r.PathOk(fn))
+					for (int n = 0; n < fileList.Count; n++)
 					{
-						string sp = r.CreateShortFile(fn);
-						archive.CreateEntryFromFile(fn, sp);
-						ShowInfo(Path.GetFileName(fn));
+						msg.progress = (double)n / fileList.Count;
+						string fn = fileList[n];
+						string ex = Path.GetExtension(fn);
+						if (r.PathOk(fn))
+						{
+							string sp = r.CreateShortFile(fn);
+							archive.CreateEntryFromFile(fn, $@"{root}{sp}");
+							msg.msg = Path.GetFileName(fn);
+						}
+						sm.SetMsg(msg);
 					}
 				}
-			}
-			progressBar.Value = 0;
-			UpdateInfo(tbName.Text);
-			timer.Stop();
-			TimeSpan ts = timer.Elapsed;
-			sslInfo.Text = $"{r.name} backuped ({ts.TotalSeconds:N2})";
+				timer.Stop();
+				TimeSpan ts = timer.Elapsed;
+				msg.msg = $"{r.name} backuped ({ts.TotalSeconds:N2})";
+				msg.progress = 2;
+				sm.SetMsg(msg);
+			});
 		}
 
 		void ClickDelete()
@@ -217,8 +225,6 @@ namespace RapBackup
 			string[] ad = Directory.GetDirectories(path);
 			List<string> ls = new List<string>(ad);
 			ls.Sort();
-			if (ply == 0)
-				progressBar.Maximum = ls.Count;
 			for (int n = 0; n < ls.Count; n++)
 			{
 				string d = ls[n];
@@ -228,8 +234,6 @@ namespace RapBackup
 				TreeNode tn = node.Nodes.Add(fn);
 				tn.Checked = (r.dirList.Count == 0) || (r.dirList.IndexOf(NodesPath(tn)) >= 0);
 				FillTree(ply + 1, r, tn, p);
-				if (ply == 0)
-					progressBar.Value = n;
 			}
 			string[] af = Directory.GetFiles(path);
 			foreach (string f in af)
@@ -360,7 +364,8 @@ namespace RapBackup
 
 		private void bBackup_Click(object sender, EventArgs e)
 		{
-			ClickBackup();
+			bBackup.Enabled = false;
+			ClickBackup(GetRec());
 		}
 
 		private void deleteToolStripMenuItem_Click(object sender, EventArgs e)
@@ -386,6 +391,22 @@ namespace RapBackup
 		private void FormBackup_FormClosing(object sender, FormClosingEventArgs e)
 		{
 			ini.Save();
+		}
+
+		private void timer1_Tick(object sender, EventArgs e)
+		{
+			CMsg m = synMsg.GetMsg();
+			if (msg.msg != m.msg)
+			{
+				msg.msg = m.msg;
+				sslInfo.Text = m.msg;
+			}
+			if (m.progress == 2)
+			{
+				m.progress = 0;
+				bBackup.Enabled = true;
+			}
+			progressBar.Value = Convert.ToInt32(progressBar.Maximum * m.progress);
 		}
 	}
 }
