@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
 using System.Collections.Generic;
@@ -11,6 +12,7 @@ namespace RapBackup
 	{
 		string recName = string.Empty;
 		readonly List<string> fileList = new List<string>();
+		public Stopwatch timer = new Stopwatch();
 		readonly CRecList recList = new CRecList();
 		public static CRapIni ini = new CRapIni();
 		readonly FormOptions formOptions = new FormOptions();
@@ -28,9 +30,16 @@ namespace RapBackup
 				lvItem.Checked = check;
 		}
 
+		void ShowInfo(string msg)
+		{
+			sslInfo.Text = msg;
+			statusStrip.Update();
+		}
+
 		void ClickBackup()
 		{
-			CRec rec = GetRec();
+			timer.Restart();
+			CRec r = GetRec();
 			progressBar.Maximum = fileList.Count;
 			string date = DateTime.Now.ToString("yyyy-MM-dd HHmmss");
 			string nameZip = $@"{FormOptions.Des}\{tbName.Text} {date}.zip";
@@ -42,18 +51,19 @@ namespace RapBackup
 					progressBar.Value = n;
 					string fn = fileList[n];
 					string ex = Path.GetExtension(fn);
-					if (rec.PathOk(fn))
+					if (r.PathOk(fn))
 					{
-						string sp = rec.CreateShortFile(fn);
+						string sp = r.CreateShortFile(fn);
 						archive.CreateEntryFromFile(fn, sp);
-						sslInfo.Text = Path.GetFileName(fn);
-						statusStrip.Update();
+						ShowInfo(Path.GetFileName(fn));
 					}
 				}
 			}
 			progressBar.Value = 0;
 			UpdateInfo(tbName.Text);
-			sslInfo.Text = "Backup completed";
+			timer.Stop();
+			TimeSpan ts = timer.Elapsed;
+			sslInfo.Text = $"{r.name} backuped ({ts.TotalSeconds:N2})";
 		}
 
 		void ClickDelete()
@@ -64,12 +74,13 @@ namespace RapBackup
 			DialogResult dr = MessageBox.Show($"Are you sure to delete {r.name}?", "Confirm Delete", MessageBoxButtons.YesNo);
 			if (dr != DialogResult.Yes)
 				return;
-			sslInfo.Text = $"Start delete";
-			statusStrip.Update();
+			ShowInfo("Delete");
 			recList.Remove(r);
 			recList.SaveToIni();
 			UpdateList();
-			sslInfo.Text = $"{r.name} deleted successfully";
+			timer.Stop();
+			TimeSpan ts = timer.Elapsed;
+			sslInfo.Text = $"{r.name} deleted ({ts.TotalSeconds:N2})";
 		}
 
 		void ClickNew()
@@ -85,15 +96,16 @@ namespace RapBackup
 			CRec r = GetRec();
 			if (r == null)
 				return;
-			sslInfo.Text = $"Start save";
-			statusStrip.Update();
-			recList.Remove(r);
+			timer.Restart();
+			ShowInfo("Save");
 			r = SettingsToRec();
-			recList.Add(r);
-			recList.SaveToIni();
+			r.SaveToIni();
+			ini.Save();
 			recName = r.name;
 			lvBackups.SelectedItems[0].Text = r.name;
-			sslInfo.Text = $"{r.name} saved successfully";
+			timer.Stop();
+			TimeSpan ts = timer.Elapsed;
+			sslInfo.Text = $"{r.name} saved ({ts.TotalSeconds:N2})";
 		}
 
 		CRec GetRec()
@@ -137,11 +149,15 @@ namespace RapBackup
 
 		void RecSelected(string name)
 		{
+			timer.Restart();
 			CRec r = recList.GetRec(name);
 			if (r == null)
 				r = new CRec();
 			RecToSettings(r);
 			UpdateInfo(name);
+			timer.Stop();
+			TimeSpan ts = timer.Elapsed;
+			sslInfo.Text = $"{r.name} selected ({ts.TotalSeconds:N2})";
 		}
 
 		void UpdateList()
@@ -189,7 +205,7 @@ namespace RapBackup
 			List<string> list = new List<string>();
 			foreach (string f in fileList)
 			{
-				string sd = Path.GetExtension(f);
+				string sd = Path.GetExtension(f).ToLower();
 				if (list.IndexOf(sd) < 0)
 					list.Add(sd);
 			}
@@ -208,8 +224,7 @@ namespace RapBackup
 				string d = ls[n];
 				string fn = Path.GetFileName(d);
 				string p = $@"{path}\{fn}";
-				sslInfo.Text = fn;
-				statusStrip.Update();
+				ShowInfo(fn);
 				TreeNode tn = node.Nodes.Add(fn);
 				tn.Checked = (r.dirList.Count == 0) || (r.dirList.IndexOf(NodesPath(tn)) >= 0);
 				FillTree(ply + 1, r, tn, p);
@@ -297,6 +312,7 @@ namespace RapBackup
 
 		void CreateRec(string folder)
 		{
+			timer.Restart();
 			string name = Path.GetFileName(folder);
 			CRec r = new CRec(name) { folder = folder.Trim('\\') };
 			r.name = recList.CreateUniqueName(r);
@@ -313,6 +329,9 @@ namespace RapBackup
 			ListViewItem lvItem = new ListViewItem(new[] { r.name }) { Selected = true };
 			lvBackups.Items.Add(lvItem);
 			lvBackups.SelectedIndexChanged -= listView_SelectedIndexChanged;
+			timer.Stop();
+			TimeSpan ts = timer.Elapsed;
+			sslInfo.Text = $"{r.name} created ({ts.TotalSeconds:N2})";
 		}
 
 		private void bNew_Click(object sender, EventArgs e)
@@ -362,6 +381,11 @@ namespace RapBackup
 		private void uncheckAllToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			CheckAll(false);
+		}
+
+		private void FormBackup_FormClosing(object sender, FormClosingEventArgs e)
+		{
+			ini.Save();
 		}
 	}
 }

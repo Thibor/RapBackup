@@ -342,6 +342,7 @@
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.Name = "FormBackup";
 			this.Text = "RapBackup";
+			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormBackup_FormClosing);
 			this.panel1.ResumeLayout(false);
 			this.contextMenuStrip1.ResumeLayout(false);
 			this.panel2.ResumeLayout(false);

@@ -1,9 +1,5 @@
 ﻿using System.IO;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using RapIni;
 
 namespace RapBackup
 {
@@ -80,22 +76,12 @@ namespace RapBackup
 			if (path == folder)
 				return string.Empty;
 			return path.Substring(folder.Length + 1);
-			/*string root = Path.GetFileName(folder);
-			if (string.IsNullOrEmpty(root))
-				return path;
-			else
-				return root + path;*/
 		}
 
 		public string CreateShortDir(string path)
 		{
 			path = Path.GetDirectoryName(path);
 			return CreateShortFile(path);
-			/*path = CreateShortFile(path);
-			int i = path.LastIndexOf('\\');
-			if (i < 0)
-				return path;
-			return path.Substring(0,i);*/
 		}
 
 	}
