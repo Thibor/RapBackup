@@ -32,6 +32,7 @@ namespace RapBackup
 			InitializeComponent();
 			LoadFromIni();
 			tbDes.Text = Des;
+			nudBackups.Value = backups;
 		}
 
 		void SaveToIni()
