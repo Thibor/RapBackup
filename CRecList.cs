@@ -101,7 +101,6 @@ namespace RapBackup
 		public void SaveToIni()
 		{
 			FormBackup.ini.DeleteKey($"name>{name}");
-			FormBackup.ini.Write($"name>{name}>check", check);
 			FormBackup.ini.Write($"name>{name}>folder", folder);
 			FormBackup.ini.Write($"name>{name}>ext", extList);
 			foreach (string d in dirList)
@@ -110,7 +109,7 @@ namespace RapBackup
 
 		public void LoadFromIni()
 		{
-			check = FormBackup.ini.ReadBool($"name>{name}>check");
+			check = true;
 			folder = FormBackup.ini.Read($"name>{name}>folder");
 			extList = FormBackup.ini.ReadListStr($"name>{name}>ext");
 			dirList = FormBackup.ini.ReadKeyList($"name>{name}>dir");
