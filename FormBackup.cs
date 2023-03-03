@@ -357,29 +357,6 @@ namespace RapBackup
 			recList.Add(r);
 			recList.SaveToIni();
 			UpdateList();
-			//ListViewItem lvItem = new ListViewItem(new[] { r.name }) { Selected = true };
-			//lvBackups.Items.Add(lvItem);
-			/*
-			lastFolder = folder;
-			timer.Restart();
-			string name = Path.GetFileName(folder);
-			CRec r = new CRec(name) { folder = folder.Trim('\\') };
-			r.name = recList.CreateUniqueName(r);
-			lFolder.Text = r.folder;
-			tbName.Text = r.name;
-			//FillTree(r);
-			r.dirList = GetListDir(r);
-			r.extList = GetListExt();
-			FillExt(r, r.extList);
-			recList.Add(r);
-			recList.SaveToIni();
-			lvBackups.SelectedIndexChanged -= listView_SelectedIndexChanged;
-			ListViewItem lvItem = new ListViewItem(new[] { r.name }) { Selected = true };
-			lvBackups.Items.Add(lvItem);
-			lvBackups.SelectedIndexChanged -= listView_SelectedIndexChanged;
-			timer.Stop();
-			TimeSpan ts = timer.Elapsed;
-			sslInfo.Text = $"{r.name} created ({ts.TotalSeconds:N2})";*/
 		}
 
 		private void bNew_Click(object sender, EventArgs e)
