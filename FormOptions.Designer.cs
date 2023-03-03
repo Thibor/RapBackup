@@ -33,8 +33,11 @@
 			this.tbDes = new System.Windows.Forms.TextBox();
 			this.bDes = new System.Windows.Forms.Button();
 			this.folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
+			this.nudBackups = new System.Windows.Forms.NumericUpDown();
+			this.label1 = new System.Windows.Forms.Label();
 			this.groupBox1.SuspendLayout();
 			this.panel1.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.nudBackups)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// groupBox1
@@ -78,11 +81,31 @@
 			this.bDes.UseVisualStyleBackColor = true;
 			this.bDes.Click += new System.EventHandler(this.bDes_Click);
 			// 
+			// nudBackups
+			// 
+			this.nudBackups.Location = new System.Drawing.Point(12, 62);
+			this.nudBackups.Name = "nudBackups";
+			this.nudBackups.Size = new System.Drawing.Size(120, 20);
+			this.nudBackups.TabIndex = 6;
+			this.nudBackups.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			this.nudBackups.ValueChanged += new System.EventHandler(this.nudBackups_ValueChanged);
+			// 
+			// label1
+			// 
+			this.label1.AutoSize = true;
+			this.label1.Location = new System.Drawing.Point(138, 64);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(148, 13);
+			this.label1.TabIndex = 7;
+			this.label1.Text = "Backups limit (0 mean no limit)";
+			// 
 			// FormOptions
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(496, 63);
+			this.ClientSize = new System.Drawing.Size(496, 94);
+			this.Controls.Add(this.label1);
+			this.Controls.Add(this.nudBackups);
 			this.Controls.Add(this.groupBox1);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
 			this.Name = "FormOptions";
@@ -93,7 +116,9 @@
 			this.groupBox1.ResumeLayout(false);
 			this.panel1.ResumeLayout(false);
 			this.panel1.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.nudBackups)).EndInit();
 			this.ResumeLayout(false);
+			this.PerformLayout();
 
 		}
 
@@ -104,5 +129,7 @@
 		private System.Windows.Forms.TextBox tbDes;
 		private System.Windows.Forms.Button bDes;
 		private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog;
+		private System.Windows.Forms.NumericUpDown nudBackups;
+		private System.Windows.Forms.Label label1;
 	}
 }

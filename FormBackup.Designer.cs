@@ -144,7 +144,7 @@
 			this.treeView.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.treeView.Location = new System.Drawing.Point(0, 0);
 			this.treeView.Name = "treeView";
-			this.treeView.Size = new System.Drawing.Size(471, 307);
+			this.treeView.Size = new System.Drawing.Size(419, 307);
 			this.treeView.TabIndex = 1;
 			this.treeView.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this.treeView_AfterCheck);
 			// 
@@ -157,10 +157,10 @@
 			this.lvExt.Dock = System.Windows.Forms.DockStyle.Right;
 			this.lvExt.FullRowSelect = true;
 			this.lvExt.HideSelection = false;
-			this.lvExt.Location = new System.Drawing.Point(471, 0);
+			this.lvExt.Location = new System.Drawing.Point(419, 0);
 			this.lvExt.MultiSelect = false;
 			this.lvExt.Name = "lvExt";
-			this.lvExt.Size = new System.Drawing.Size(118, 307);
+			this.lvExt.Size = new System.Drawing.Size(170, 307);
 			this.lvExt.Sorting = System.Windows.Forms.SortOrder.Ascending;
 			this.lvExt.TabIndex = 2;
 			this.lvExt.UseCompatibleStateImageBehavior = false;
@@ -348,6 +348,7 @@
 			this.Controls.Add(this.statusStrip);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.Name = "FormBackup";
+			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "RapBackup";
 			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormBackup_FormClosing);
 			this.panel1.ResumeLayout(false);

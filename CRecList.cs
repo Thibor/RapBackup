@@ -6,8 +6,17 @@ namespace RapBackup
 
 	class CMsg
 	{
+		public bool stop = false;
+		public bool started = false;
+		public bool done = false;
+		public bool finished = false;
 		public double progress = 0;
 		public string msg = string.Empty;
+		public string name = string.Empty;
+		public string folder = string.Empty;
+		public List<string> files = new List<string>();
+		public List<string> dir = new List<string>();
+		public List<string> ext = new List<string>();
 
 		public CMsg()
 		{
@@ -21,15 +30,24 @@ namespace RapBackup
 
 		public void Assign(CMsg m)
 		{
+			stop = m.stop;
+			started = m.started;
+			done = m.done;
+			finished = m.finished;
 			progress = m.progress;
 			msg = m.msg;
+			name = m.name;
+			folder = m.folder;
+			files = new List<string>(m.files);
+			dir = new List<string>(m.dir);
+			ext = new List<string>(m.ext);
 		}
 
 	}
 
 	class CSynMsg
 	{
-		private static CMsg msg = new CMsg();
+		readonly private static CMsg msg = new CMsg();
 		private readonly object locker = new object();
 
 		public CMsg GetMsg()
@@ -52,6 +70,7 @@ namespace RapBackup
 
 	class CRec
 	{
+		public bool check = false;
 		public string name = string.Empty;
 		public string folder = string.Empty;
 		public List<string> dirList = new List<string>();
@@ -82,6 +101,7 @@ namespace RapBackup
 		public void SaveToIni()
 		{
 			FormBackup.ini.DeleteKey($"name>{name}");
+			FormBackup.ini.Write($"name>{name}>check", check);
 			FormBackup.ini.Write($"name>{name}>folder", folder);
 			FormBackup.ini.Write($"name>{name}>ext", extList);
 			foreach (string d in dirList)
@@ -90,6 +110,7 @@ namespace RapBackup
 
 		public void LoadFromIni()
 		{
+			check = FormBackup.ini.ReadBool($"name>{name}>check");
 			folder = FormBackup.ini.Read($"name>{name}>folder");
 			extList = FormBackup.ini.ReadListStr($"name>{name}>ext");
 			dirList = FormBackup.ini.ReadKeyList($"name>{name}>dir");
@@ -122,7 +143,7 @@ namespace RapBackup
 			return false;
 		}
 
-		public string CreateShortFile(string path)
+		public static string CreateShortFile(string folder,string path)
 		{
 			if (path == folder)
 				return string.Empty;
@@ -132,7 +153,7 @@ namespace RapBackup
 		public string CreateShortDir(string path)
 		{
 			path = Path.GetDirectoryName(path);
-			return CreateShortFile(path);
+			return CreateShortFile(folder,path);
 		}
 
 	}

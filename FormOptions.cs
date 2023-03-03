@@ -13,16 +13,15 @@ namespace RapBackup
 {
 	public partial class FormOptions : Form
 	{
-		static string des;
+		public static string folder = AppContext.BaseDirectory;
+		public static int backups = 0;
 
 		public static string Des
 		{
 			get
 			{
-				if(string.IsNullOrEmpty(des))
-					return AppContext.BaseDirectory;
-				if (Directory.Exists(des))
-					return des;
+				if (Directory.Exists(folder))
+					return folder;
 				else
 					return AppContext.BaseDirectory;
 			}
@@ -35,33 +34,40 @@ namespace RapBackup
 			tbDes.Text = Des;
 		}
 
-
-
 		void SaveToIni()
 		{
-			FormBackup.ini.Write("des",Des);
+			FormBackup.ini.Write("options>folder",folder);
+			FormBackup.ini.Write("options>backups", backups);
 		}
 
 		void LoadFromIni()
 		{
-			des = FormBackup.ini.Read("des",Des);
+			folder = FormBackup.ini.Read("options>folder",folder);
+			backups = FormBackup.ini.ReadInt("options>backups", backups);
 		}
 
 		private void FormOptions_FormClosing(object sender, FormClosingEventArgs e)
 		{
-			des = tbDes.Text;
+			folder = tbDes.Text;
 			SaveToIni();
 			FormBackup.ini.Save();
 		}
 
 		private void bDes_Click(object sender, EventArgs e)
 		{
-			folderBrowserDialog.SelectedPath = AppContext.BaseDirectory;
+			folderBrowserDialog.SelectedPath = Des;
 			DialogResult result = folderBrowserDialog.ShowDialog();
 			if (result == DialogResult.OK)
 			{
-				tbDes.Text = folderBrowserDialog.SelectedPath;
+				folder = folderBrowserDialog.SelectedPath;
+				tbDes.Text = folder;
 			}
 		}
+
+		private void nudBackups_ValueChanged(object sender, EventArgs e)
+		{
+			backups = (int)nudBackups.Value;
+		}
+
 	}
 }
