@@ -124,6 +124,7 @@ namespace RapBackup
 			timer.Restart();
 			ShowInfo("Save");
 			SettingsToRec(r);
+			r.saved = true;
 			r.SaveToIni();
 			ini.Save();
 			lvBackups.SelectedItems[0].Text = r.name;
@@ -269,7 +270,7 @@ namespace RapBackup
 
 		void FillDir(CRec r, TreeNode tn, string path)
 		{
-			bool check = (r.dirList.IndexOf(path) >= 0) || !r.check;
+			bool check = (r.dirList.IndexOf(path) >= 0) || !r.saved;
 			string[] ap = path.Split('\\');
 			for (int n = 0; n < ap.Length; n++)
 			{
