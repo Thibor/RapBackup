@@ -70,7 +70,6 @@ namespace RapBackup
 
 	class CRec
 	{
-		public bool saved = false;
 		public string name = string.Empty;
 		public string folder = string.Empty;
 		public List<string> dirList = new List<string>();
@@ -101,7 +100,6 @@ namespace RapBackup
 		public void SaveToIni()
 		{
 			FormBackup.ini.DeleteKey($"name>{name}");
-			FormBackup.ini.Write($"name>{name}>saved",saved);
 			FormBackup.ini.Write($"name>{name}>folder", folder);
 			FormBackup.ini.Write($"name>{name}>ext", extList);
 			foreach (string d in dirList)
@@ -110,7 +108,6 @@ namespace RapBackup
 
 		public void LoadFromIni()
 		{
-			saved = FormBackup.ini.ReadBool($"name>{name}>saved");
 			folder = FormBackup.ini.Read($"name>{name}>folder");
 			extList = FormBackup.ini.ReadListStr($"name>{name}>ext");
 			dirList = FormBackup.ini.ReadKeyList($"name>{name}>dir");

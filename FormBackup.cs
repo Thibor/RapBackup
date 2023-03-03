@@ -124,7 +124,6 @@ namespace RapBackup
 			timer.Restart();
 			ShowInfo("Save");
 			SettingsToRec(r);
-			r.saved = true;
 			r.SaveToIni();
 			ini.Save();
 			lvBackups.SelectedItems[0].Text = r.name;
@@ -263,14 +262,14 @@ namespace RapBackup
 			foreach (string e in extList)
 			{
 				ListViewItem lvItem = new ListViewItem(new[] { e });
-				lvItem.Checked = (r.extList.Count == 0) || (r.extList.IndexOf(lvItem.Text) >= 0);
+				lvItem.Checked =  (r.extList.IndexOf(lvItem.Text) >= 0) || (r.extList.Count == 0);
 				lvExt.Items.Add(lvItem);
 			}
 		}
 
 		void FillDir(CRec r, TreeNode tn, string path)
 		{
-			bool check = (r.dirList.IndexOf(path) >= 0) || !r.saved;
+			bool check = (r.dirList.IndexOf(path) >= 0) || (r.extList.Count==0);
 			string[] ap = path.Split('\\');
 			for (int n = 0; n < ap.Length; n++)
 			{
