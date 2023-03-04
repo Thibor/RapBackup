@@ -57,6 +57,7 @@ namespace RapBackup
 		{
 			await Task.Run(() =>
 			{
+				List<string> folderList = new List<string>(r.dirList);
 				List<string> fileList = new List<string>(fl);
 				CSynMsg sm = new CSynMsg();
 				CMsg msg = sm.GetMsg();
@@ -69,6 +70,8 @@ namespace RapBackup
 				using (FileStream zipFile = File.Open(nameZip, FileMode.Create))
 				using (var archive = new ZipArchive(zipFile, ZipArchiveMode.Create))
 				{
+					foreach(string d in folderList)
+						archive.CreateEntry($@"{root}{d}\");
 					for (int n = 0; n < fileList.Count; n++)
 					{
 						msg.progress = (double)n / fileList.Count;
@@ -445,6 +448,7 @@ namespace RapBackup
 					fileList = new List<string>(m.files);
 					FillDir(r, m.dir);
 					FillExt(r, m.ext);
+					UpdateInfo(r.name);
 					m.finished = true;
 					m.files.Clear();
 					m.dir.Clear();
