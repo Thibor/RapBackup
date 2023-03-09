@@ -212,6 +212,8 @@ namespace RapBackup
 
 		bool FillList(string folder, string path, List<string> files, List<string> dir, List<string> ext)
 		{
+			if (!Directory.Exists(folder))
+				return false;
 			CSynMsg sm = new CSynMsg();
 			CMsg m = sm.GetMsg();
 			if (m.stop)
