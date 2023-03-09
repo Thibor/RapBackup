@@ -371,6 +371,8 @@ namespace RapBackup
 
 		private void listView_SelectedIndexChanged(object sender, EventArgs e)
 		{
+			lFolder.Text = String.Empty;
+			tbName.Text = String.Empty;
 			treeView.Nodes.Clear();
 			lvExt.Items.Clear();
 			CRec r = GetRec();
