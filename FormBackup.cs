@@ -49,7 +49,7 @@ namespace RapBackup
 
 		void ShowInfo(string msg)
 		{
-			sslInfo.Text = msg;
+			tsslInfo.Text = msg;
 			statusStrip.Update();
 		}
 
@@ -108,7 +108,7 @@ namespace RapBackup
 			UpdateList();
 			timer.Stop();
 			TimeSpan ts = timer.Elapsed;
-			sslInfo.Text = $"{r.name} deleted ({ts.TotalSeconds:N2})";
+			tsslInfo.Text = $"{r.name} deleted ({ts.TotalSeconds:N2})";
 		}
 
 		void ClickNew()
@@ -132,7 +132,7 @@ namespace RapBackup
 			lvBackups.SelectedItems[0].Text = r.name;
 			timer.Stop();
 			TimeSpan ts = timer.Elapsed;
-			sslInfo.Text = $"{r.name} saved ({ts.TotalSeconds:N2}s)";
+			tsslInfo.Text = $"{r.name} saved ({ts.TotalSeconds:N2}s)";
 		}
 
 		CRec GetRec()
@@ -152,16 +152,20 @@ namespace RapBackup
 			}
 		}
 
-		int BackupsCount(string name, out DateTime newest)
+		int BackupsCount(string name, out DateTime newest,out long size)
 		{
 			newest = DateTime.MinValue;
+			size = 0;
 			string mask = $@"{name} ????-??-?? ??????.zip";
 			string[] files = Directory.GetFiles(FormOptions.Des, mask);
 			foreach (string f in files)
 			{
 				FileInfo fi = new FileInfo(f);
 				if (newest < fi.CreationTime)
+				{
 					newest = fi.CreationTime;
+					size = fi.Length;
+				}
 			}
 			return files.Length;
 		}
@@ -194,10 +198,11 @@ namespace RapBackup
 
 		void UpdateInfo(string name)
 		{
-			int cb = BackupsCount(name, out DateTime dt);
-			toolStripStatusLabel1.Text = dt == DateTime.MinValue ? string.Empty : dt.ToString("yyyy-MM-dd hh:mm:ss");
-			toolStripStatusLabel2.Text = $"Backups {cb}";
-			sslInfo.Text = String.Empty;
+			int cb = BackupsCount(name, out DateTime dt, out long size);
+			tssDate.Text = dt == DateTime.MinValue ? string.Empty : dt.ToString("yyyy-MM-dd hh:mm:ss");
+			tssBackups.Text = $"Backups {cb}";
+			tssSize.Text = $"{size:N0}";
+			tsslInfo.Text = String.Empty;
 		}
 
 		void UpdateList()
@@ -431,7 +436,7 @@ namespace RapBackup
 			bBackup.Enabled = (fileList.Count > 0) && m.finished;
 			if (m.msg != String.Empty)
 			{
-				sslInfo.Text = m.msg;
+				tsslInfo.Text = m.msg;
 				m.msg = String.Empty;
 				synMsg.SetMsg(m);
 			}

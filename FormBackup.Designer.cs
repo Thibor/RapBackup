@@ -56,9 +56,10 @@
 			this.menuStrip1 = new System.Windows.Forms.MenuStrip();
 			this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.statusStrip = new System.Windows.Forms.StatusStrip();
-			this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
-			this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
-			this.sslInfo = new System.Windows.Forms.ToolStripStatusLabel();
+			this.tssDate = new System.Windows.Forms.ToolStripStatusLabel();
+			this.tssBackups = new System.Windows.Forms.ToolStripStatusLabel();
+			this.tsslInfo = new System.Windows.Forms.ToolStripStatusLabel();
+			this.tssSize = new System.Windows.Forms.ToolStripStatusLabel();
 			this.timer1 = new System.Windows.Forms.Timer(this.components);
 			this.panel1.SuspendLayout();
 			this.contextMenuStrip1.SuspendLayout();
@@ -306,31 +307,37 @@
 			// 
 			this.statusStrip.Font = new System.Drawing.Font("Segoe UI", 10F);
 			this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripStatusLabel1,
-            this.toolStripStatusLabel2,
-            this.sslInfo});
+            this.tssDate,
+            this.tssSize,
+            this.tssBackups,
+            this.tsslInfo});
 			this.statusStrip.Location = new System.Drawing.Point(0, 425);
 			this.statusStrip.Name = "statusStrip";
 			this.statusStrip.Size = new System.Drawing.Size(800, 22);
 			this.statusStrip.TabIndex = 3;
 			this.statusStrip.Text = "statusStrip1";
 			// 
-			// toolStripStatusLabel1
+			// tssDate
 			// 
-			this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-			this.toolStripStatusLabel1.Size = new System.Drawing.Size(0, 17);
+			this.tssDate.Name = "tssDate";
+			this.tssDate.Size = new System.Drawing.Size(0, 17);
 			// 
-			// toolStripStatusLabel2
+			// tssBackups
 			// 
-			this.toolStripStatusLabel2.Name = "toolStripStatusLabel2";
-			this.toolStripStatusLabel2.Size = new System.Drawing.Size(0, 17);
+			this.tssBackups.Name = "tssBackups";
+			this.tssBackups.Size = new System.Drawing.Size(0, 17);
 			// 
-			// sslInfo
+			// tsslInfo
 			// 
-			this.sslInfo.Font = new System.Drawing.Font("Segoe UI", 10F);
-			this.sslInfo.ForeColor = System.Drawing.Color.DarkRed;
-			this.sslInfo.Name = "sslInfo";
-			this.sslInfo.Size = new System.Drawing.Size(0, 17);
+			this.tsslInfo.Font = new System.Drawing.Font("Segoe UI", 10F);
+			this.tsslInfo.ForeColor = System.Drawing.Color.DarkRed;
+			this.tsslInfo.Name = "tsslInfo";
+			this.tsslInfo.Size = new System.Drawing.Size(0, 17);
+			// 
+			// tssSize
+			// 
+			this.tssSize.Name = "tssSize";
+			this.tssSize.Size = new System.Drawing.Size(0, 17);
 			// 
 			// timer1
 			// 
@@ -394,13 +401,14 @@
 		private System.Windows.Forms.MenuStrip menuStrip1;
 		private System.Windows.Forms.ToolStripMenuItem optionsToolStripMenuItem;
 		private System.Windows.Forms.StatusStrip statusStrip;
-		private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
-		private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel2;
-		private System.Windows.Forms.ToolStripStatusLabel sslInfo;
+		private System.Windows.Forms.ToolStripStatusLabel tssDate;
+		private System.Windows.Forms.ToolStripStatusLabel tssBackups;
+		private System.Windows.Forms.ToolStripStatusLabel tsslInfo;
 		private System.Windows.Forms.ContextMenuStrip contextMenuStrip2;
 		private System.Windows.Forms.ToolStripMenuItem checkAllToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem uncheckAllToolStripMenuItem;
 		private System.Windows.Forms.Timer timer1;
+		private System.Windows.Forms.ToolStripStatusLabel tssSize;
 	}
 }
 
