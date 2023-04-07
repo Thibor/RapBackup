@@ -108,6 +108,7 @@ namespace RapBackup
 			UpdateList();
 			timer.Stop();
 			TimeSpan ts = timer.Elapsed;
+			lvBackups_SelectedIndexChanged(null,null);
 			tsslInfo.Text = $"{r.name} deleted ({ts.TotalSeconds:N2})";
 		}
 
@@ -374,7 +375,7 @@ namespace RapBackup
 			ClickNew();
 		}
 
-		private void listView_SelectedIndexChanged(object sender, EventArgs e)
+		private void lvBackups_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			lFolder.Text = String.Empty;
 			tbName.Text = String.Empty;

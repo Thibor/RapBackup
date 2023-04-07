@@ -57,9 +57,9 @@
 			this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.statusStrip = new System.Windows.Forms.StatusStrip();
 			this.tssDate = new System.Windows.Forms.ToolStripStatusLabel();
+			this.tssSize = new System.Windows.Forms.ToolStripStatusLabel();
 			this.tssBackups = new System.Windows.Forms.ToolStripStatusLabel();
 			this.tsslInfo = new System.Windows.Forms.ToolStripStatusLabel();
-			this.tssSize = new System.Windows.Forms.ToolStripStatusLabel();
 			this.timer1 = new System.Windows.Forms.Timer(this.components);
 			this.panel1.SuspendLayout();
 			this.contextMenuStrip1.SuspendLayout();
@@ -98,7 +98,7 @@
 			this.lvBackups.TabIndex = 0;
 			this.lvBackups.UseCompatibleStateImageBehavior = false;
 			this.lvBackups.View = System.Windows.Forms.View.Details;
-			this.lvBackups.SelectedIndexChanged += new System.EventHandler(this.listView_SelectedIndexChanged);
+			this.lvBackups.SelectedIndexChanged += new System.EventHandler(this.lvBackups_SelectedIndexChanged);
 			// 
 			// columnHeader1
 			// 
@@ -322,6 +322,11 @@
 			this.tssDate.Name = "tssDate";
 			this.tssDate.Size = new System.Drawing.Size(0, 17);
 			// 
+			// tssSize
+			// 
+			this.tssSize.Name = "tssSize";
+			this.tssSize.Size = new System.Drawing.Size(0, 17);
+			// 
 			// tssBackups
 			// 
 			this.tssBackups.Name = "tssBackups";
@@ -333,11 +338,6 @@
 			this.tsslInfo.ForeColor = System.Drawing.Color.DarkRed;
 			this.tsslInfo.Name = "tsslInfo";
 			this.tsslInfo.Size = new System.Drawing.Size(0, 17);
-			// 
-			// tssSize
-			// 
-			this.tssSize.Name = "tssSize";
-			this.tssSize.Size = new System.Drawing.Size(0, 17);
 			// 
 			// timer1
 			// 
