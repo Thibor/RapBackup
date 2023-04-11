@@ -7,9 +7,9 @@ namespace RapBackup
 	class CMsg
 	{
 		public bool stop = false;
-		public bool started = false;
-		public bool done = false;
-		public bool finished = false;
+		public bool listStarted = false;
+		public bool listDone = true;
+		public bool listFinished = false;
 		public double progress = 0;
 		public string msg = string.Empty;
 		public string name = string.Empty;
@@ -31,9 +31,9 @@ namespace RapBackup
 		public void Assign(CMsg m)
 		{
 			stop = m.stop;
-			started = m.started;
-			done = m.done;
-			finished = m.finished;
+			listStarted = m.listStarted;
+			listDone = m.listDone;
+			listFinished = m.listFinished;
 			progress = m.progress;
 			msg = m.msg;
 			name = m.name;

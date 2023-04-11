@@ -86,7 +86,6 @@ namespace RapBackup
 						sm.SetMsg(msg);
 					}
 				}
-				timer.Stop();
 				TimeSpan ts = timer.Elapsed;
 				msg.msg = $"{r.name} backuped ({ts.TotalSeconds:N2})";
 				msg.progress = 2;
@@ -253,11 +252,10 @@ namespace RapBackup
 				List<string> dir = new List<string>();
 				List<string> ext = new List<string>();
 				FillList(folder, folder, files, dir, ext);
-				timer.Stop();
 				TimeSpan ts = timer.Elapsed;
 				CSynMsg sm = new CSynMsg();
 				CMsg m = sm.GetMsg();
-				m.done = true;
+				m.listDone = true;
 				m.files = files;
 				m.dir = dir;
 				m.ext = ext;
@@ -351,6 +349,12 @@ namespace RapBackup
 			UpdateInfo(r.name);
 		}
 
+		void RecToSettings()
+		{
+			CRec r = GetRec();
+			RecToSettings(r);
+		}
+
 		void SettingsToRec(CRec r)
 		{
 			r.folder = lFolder.Text;
@@ -381,8 +385,7 @@ namespace RapBackup
 			tbName.Text = String.Empty;
 			treeView.Nodes.Clear();
 			lvExt.Items.Clear();
-			CRec r = GetRec();
-			RecToSettings(r);
+			RecToSettings();
 		}
 
 		private void treeView_AfterCheck(object sender, TreeViewEventArgs e)
@@ -434,7 +437,7 @@ namespace RapBackup
 			if (r == null)
 				return;
 			CMsg m = synMsg.GetMsg();
-			bBackup.Enabled = (fileList.Count > 0) && m.finished;
+			bBackup.Enabled = (fileList.Count > 0) && m.listFinished;
 			if (m.msg != String.Empty)
 			{
 				tsslInfo.Text = m.msg;
@@ -448,32 +451,34 @@ namespace RapBackup
 					m.progress = 0;
 					BackupsLimit(r.name);
 					synMsg.SetMsg(m);
+					RecToSettings(r);
+					lvBackups.Focus();
 				}
 				progressBar.Value = Convert.ToInt32(progressBar.Maximum * m.progress);
 			}
 			if (r.name != String.Empty)
 			{
-				if (m.done && !m.finished && (m.name == r.name) && (m.folder == r.folder))
+				if (m.listDone && !m.listFinished && (m.name == r.name) && (m.folder == r.folder))
 				{
 					fileList = new List<string>(m.files);
 					FillDir(r, m.dir);
 					FillExt(r, m.ext);
 					UpdateInfo(r.name);
-					m.finished = true;
+					m.listFinished = true;
 					m.files.Clear();
 					m.dir.Clear();
 					m.ext.Clear();
 					synMsg.SetMsg(m);
 				}
-				else if ((!m.started || m.done) && (m.name != r.name))
+				else if ((!m.listStarted || m.listDone) && (m.name != r.name))
 				{
 					fileList.Clear();
 					m.name = r.name;
 					m.folder = r.folder;
 					m.stop = false;
-					m.started = true;
-					m.done = false;
-					m.finished = false;
+					m.listStarted = true;
+					m.listDone = false;
+					m.listFinished = false;
 					synMsg.SetMsg(m);
 					FillList(r.folder);
 				}
