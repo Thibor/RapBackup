@@ -199,7 +199,7 @@ namespace RapBackup
 		void UpdateInfo(string name)
 		{
 			int cb = BackupsCount(name, out DateTime dt, out long size);
-			tssDate.Text = dt == DateTime.MinValue ? string.Empty : dt.ToString("yyyy-MM-dd hh:mm:ss");
+			tssDate.Text = dt == DateTime.MinValue ? string.Empty : dt.ToString("yyyy-MM-dd HH:mm:ss");
 			tssBackups.Text = $"Backups {cb}";
 			tssSize.Text = $"{size:N0}";
 			tsslInfo.Text = String.Empty;
