@@ -70,8 +70,9 @@ namespace RapBackup
 				using (FileStream zipFile = File.Open(nameZip, FileMode.Create))
 				using (var archive = new ZipArchive(zipFile, ZipArchiveMode.Create))
 				{
-					foreach(string d in folderList)
-						archive.CreateEntry($@"{root}{d}\");
+					foreach (string d in folderList)
+						if (Directory.Exists($@"{r.folder}\{d}"))
+							archive.CreateEntry($@"{root}{d}\");
 					for (int n = 0; n < fileList.Count; n++)
 					{
 						msg.progress = (double)n / fileList.Count;
@@ -107,7 +108,7 @@ namespace RapBackup
 			UpdateList();
 			timer.Stop();
 			TimeSpan ts = timer.Elapsed;
-			lvBackups_SelectedIndexChanged(null,null);
+			lvBackups_SelectedIndexChanged(null, null);
 			tsslInfo.Text = $"{r.name} deleted ({ts.TotalSeconds:N2})";
 		}
 
@@ -152,7 +153,7 @@ namespace RapBackup
 			}
 		}
 
-		int BackupsCount(string name, out DateTime newest,out long size)
+		int BackupsCount(string name, out DateTime newest, out long size)
 		{
 			newest = DateTime.MinValue;
 			size = 0;
@@ -271,14 +272,14 @@ namespace RapBackup
 			foreach (string e in extList)
 			{
 				ListViewItem lvItem = new ListViewItem(new[] { e });
-				lvItem.Checked =  (r.extList.IndexOf(lvItem.Text) >= 0) || (r.extList.Count == 0);
+				lvItem.Checked = (r.extList.IndexOf(lvItem.Text) >= 0) || (r.extList.Count == 0);
 				lvExt.Items.Add(lvItem);
 			}
 		}
 
 		void FillDir(CRec r, TreeNode tn, string path)
 		{
-			bool check = (r.dirList.IndexOf(path) >= 0) || (r.extList.Count==0);
+			bool check = (r.dirList.IndexOf(path) >= 0) || (r.extList.Count == 0);
 			string[] ap = path.Split('\\');
 			for (int n = 0; n < ap.Length; n++)
 			{
@@ -359,6 +360,7 @@ namespace RapBackup
 		{
 			r.folder = lFolder.Text;
 			r.name = tbName.Text;
+			r.dirList.Clear();
 			r.dirList = GetDirList(treeView.Nodes[0], String.Empty);
 			r.extList = GetCheckedExt();
 		}
