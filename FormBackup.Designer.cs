@@ -61,6 +61,7 @@
 			this.tssBackups = new System.Windows.Forms.ToolStripStatusLabel();
 			this.tsslInfo = new System.Windows.Forms.ToolStripStatusLabel();
 			this.timer1 = new System.Windows.Forms.Timer(this.components);
+			this.tssLast = new System.Windows.Forms.ToolStripStatusLabel();
 			this.panel1.SuspendLayout();
 			this.contextMenuStrip1.SuspendLayout();
 			this.panel2.SuspendLayout();
@@ -310,6 +311,7 @@
             this.tssDate,
             this.tssSize,
             this.tssBackups,
+            this.tssLast,
             this.tsslInfo});
 			this.statusStrip.Location = new System.Drawing.Point(0, 425);
 			this.statusStrip.Name = "statusStrip";
@@ -343,6 +345,11 @@
 			// 
 			this.timer1.Enabled = true;
 			this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+			// 
+			// tssLast
+			// 
+			this.tssLast.Name = "tssLast";
+			this.tssLast.Size = new System.Drawing.Size(0, 17);
 			// 
 			// FormBackup
 			// 
@@ -409,6 +416,7 @@
 		private System.Windows.Forms.ToolStripMenuItem uncheckAllToolStripMenuItem;
 		private System.Windows.Forms.Timer timer1;
 		private System.Windows.Forms.ToolStripStatusLabel tssSize;
+		private System.Windows.Forms.ToolStripStatusLabel tssLast;
 	}
 }
 

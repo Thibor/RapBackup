@@ -11,6 +11,7 @@ namespace RapBackup
 {
 	public partial class FormBackup : Form
 	{
+		int timerCounter = 0;
 		string lastFolder = string.Empty;
 		string lastBackup = string.Empty;
 		List<string> fileList = new List<string>();
@@ -47,51 +48,57 @@ namespace RapBackup
 				lvItem.Checked = check;
 		}
 
-		void ShowInfo(string msg)
+		void ClickBackup()
 		{
-			tsslInfo.Text = msg;
-			statusStrip.Update();
+			CRec r = GetRec();
+			if (r == null)
+				return;
+			SettingsToRec(r);
+			ClickBackup(r, fileList);
+		}
+
+		void BackupTask(CRec r,string dirDes, List<string> fl)
+		{
+			Stopwatch timer = new Stopwatch();
+			timer.Restart();
+			List<string> folderList = new List<string>(r.dirList);
+			List<string> fileList = new List<string>(fl);
+			CSynMsg sm = new CSynMsg();
+			CMsg msg = sm.GetMsg();
+			msg.progress = 0;
+			string date = DateTime.Now.ToString("yyyy-MM-dd HHmmss");
+			string nameZip = $@"{dirDes}\{r.name} {date}.zip";
+			string root = r.Root;
+			string folder = r.folder;
+			using (FileStream zipFile = File.Open(nameZip, FileMode.Create))
+			using (var archive = new ZipArchive(zipFile, ZipArchiveMode.Create))
+			{
+				foreach (string d in folderList)
+					if (Directory.Exists($@"{r.folder}\{d}"))
+						archive.CreateEntry($@"{root}{d}\");
+				for (int n = 0; n < fileList.Count; n++)
+				{
+					msg.progress = (double)n / fileList.Count;
+					string fn = fileList[n];
+					string ex = Path.GetExtension(fn);
+					if (r.PathOk(fn))
+					{
+						string sp = CRec.CreateShortFile(folder, fn);
+						archive.CreateEntryFromFile(fn, $@"{root}{sp}");
+						msg.msg = Path.GetFileName(fn);
+					}
+					sm.SetMsg(msg);
+				}
+			}
+			TimeSpan ts = timer.Elapsed;
+			msg.msg = $"{r.name} backuped ({ts.TotalSeconds:N2})";
+			msg.progress = 2;
+			sm.SetMsg(msg);
 		}
 
 		async void ClickBackup(CRec r, List<string> fl)
 		{
-			await Task.Run(() =>
-			{
-				List<string> folderList = new List<string>(r.dirList);
-				List<string> fileList = new List<string>(fl);
-				CSynMsg sm = new CSynMsg();
-				CMsg msg = sm.GetMsg();
-				msg.progress = 0;
-				timer.Restart();
-				string date = DateTime.Now.ToString("yyyy-MM-dd HHmmss");
-				string nameZip = $@"{FormOptions.Des}\{tbName.Text} {date}.zip";
-				string root = r.Root;
-				string folder = r.folder;
-				using (FileStream zipFile = File.Open(nameZip, FileMode.Create))
-				using (var archive = new ZipArchive(zipFile, ZipArchiveMode.Create))
-				{
-					foreach (string d in folderList)
-						if (Directory.Exists($@"{r.folder}\{d}"))
-							archive.CreateEntry($@"{root}{d}\");
-					for (int n = 0; n < fileList.Count; n++)
-					{
-						msg.progress = (double)n / fileList.Count;
-						string fn = fileList[n];
-						string ex = Path.GetExtension(fn);
-						if (r.PathOk(fn))
-						{
-							string sp = CRec.CreateShortFile(folder, fn);
-							archive.CreateEntryFromFile(fn, $@"{root}{sp}");
-							msg.msg = Path.GetFileName(fn);
-						}
-						sm.SetMsg(msg);
-					}
-				}
-				TimeSpan ts = timer.Elapsed;
-				msg.msg = $"{r.name} backuped ({ts.TotalSeconds:N2})";
-				msg.progress = 2;
-				sm.SetMsg(msg);
-			});
+			await Task.Run(()=>BackupTask(r, FormOptions.Des, fl));
 		}
 
 		void ClickDelete()
@@ -102,7 +109,7 @@ namespace RapBackup
 			DialogResult dr = MessageBox.Show($"Are you sure to delete {r.name}?", "Confirm Delete", MessageBoxButtons.YesNo);
 			if (dr != DialogResult.Yes)
 				return;
-			ShowInfo("Delete");
+			tsslInfo.Text = "Delete";
 			recList.Remove(r);
 			recList.SaveToIni();
 			UpdateList();
@@ -126,7 +133,7 @@ namespace RapBackup
 			if (r == null)
 				return;
 			timer.Restart();
-			ShowInfo("Save");
+			tsslInfo.Text= "Save";
 			SettingsToRec(r);
 			r.SaveToIni();
 			ini.Save();
@@ -404,7 +411,7 @@ namespace RapBackup
 
 		private void bBackup_Click(object sender, EventArgs e)
 		{
-			ClickBackup(GetRec(), fileList);
+			ClickBackup();
 		}
 
 		private void deleteToolStripMenuItem_Click(object sender, EventArgs e)
@@ -440,16 +447,12 @@ namespace RapBackup
 				return;
 			CMsg m = synMsg.GetMsg();
 			bBackup.Enabled = (fileList.Count > 0) && m.listFinished;
-			if (m.msg != String.Empty)
-			{
-				tsslInfo.Text = m.msg;
-				m.msg = String.Empty;
-				synMsg.SetMsg(m);
-			}
 			if (m.progress > 0)
 			{
 				if (m.progress == 2)
 				{
+					tssLast.Text = m.msg;
+					m.msg = String.Empty;
 					m.progress = 0;
 					BackupsLimit(r.name);
 					synMsg.SetMsg(m);
@@ -457,6 +460,12 @@ namespace RapBackup
 					lvBackups.Focus();
 				}
 				progressBar.Value = Convert.ToInt32(progressBar.Maximum * m.progress);
+			}
+			if (m.msg != String.Empty)
+			{
+				tsslInfo.Text = m.msg;
+				m.msg = String.Empty;
+				synMsg.SetMsg(m);
 			}
 			if (r.name != String.Empty)
 			{
@@ -491,6 +500,12 @@ namespace RapBackup
 				}
 
 			}
-		}
+			if(++timerCounter > 10)
+			{
+				timerCounter = 0;
+				statusStrip.Update();
+			}
+
+		}//timer1_Tick
 	}
 }
