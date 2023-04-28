@@ -59,9 +59,9 @@
 			this.tssDate = new System.Windows.Forms.ToolStripStatusLabel();
 			this.tssSize = new System.Windows.Forms.ToolStripStatusLabel();
 			this.tssBackups = new System.Windows.Forms.ToolStripStatusLabel();
+			this.tssLast = new System.Windows.Forms.ToolStripStatusLabel();
 			this.tsslInfo = new System.Windows.Forms.ToolStripStatusLabel();
 			this.timer1 = new System.Windows.Forms.Timer(this.components);
-			this.tssLast = new System.Windows.Forms.ToolStripStatusLabel();
 			this.panel1.SuspendLayout();
 			this.contextMenuStrip1.SuspendLayout();
 			this.panel2.SuspendLayout();
@@ -334,6 +334,11 @@
 			this.tssBackups.Name = "tssBackups";
 			this.tssBackups.Size = new System.Drawing.Size(0, 17);
 			// 
+			// tssLast
+			// 
+			this.tssLast.Name = "tssLast";
+			this.tssLast.Size = new System.Drawing.Size(0, 17);
+			// 
 			// tsslInfo
 			// 
 			this.tsslInfo.Font = new System.Drawing.Font("Segoe UI", 10F);
@@ -345,11 +350,6 @@
 			// 
 			this.timer1.Enabled = true;
 			this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
-			// 
-			// tssLast
-			// 
-			this.tssLast.Name = "tssLast";
-			this.tssLast.Size = new System.Drawing.Size(0, 17);
 			// 
 			// FormBackup
 			// 

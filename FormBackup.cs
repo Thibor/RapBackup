@@ -50,10 +50,7 @@ namespace RapBackup
 
 		void ClickBackup()
 		{
-			CRec r = GetRec();
-			if (r == null)
-				return;
-			SettingsToRec(r);
+			CRec r = SettingsToRec();
 			ClickBackup(r, fileList);
 		}
 
@@ -129,12 +126,9 @@ namespace RapBackup
 
 		void ClickSave()
 		{
-			CRec r = GetRec();
-			if (r == null)
-				return;
 			timer.Restart();
 			tsslInfo.Text= "Save";
-			SettingsToRec(r);
+			CRec r = SettingsToRec();
 			r.SaveToIni();
 			ini.Save();
 			lvBackups.SelectedItems[0].Text = r.name;
@@ -363,13 +357,17 @@ namespace RapBackup
 			RecToSettings(r);
 		}
 
-		void SettingsToRec(CRec r)
+		CRec SettingsToRec()
 		{
-			r.folder = lFolder.Text;
-			r.name = tbName.Text;
+			CRec r = new CRec
+			{
+				folder = lFolder.Text,
+				name = tbName.Text
+			};
 			r.dirList.Clear();
 			r.dirList = GetDirList(treeView.Nodes[0], String.Empty);
 			r.extList = GetCheckedExt();
+			return r;
 		}
 
 		void CreateRec(string folder)
