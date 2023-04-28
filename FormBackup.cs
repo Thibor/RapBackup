@@ -442,9 +442,6 @@ namespace RapBackup
 
 		private void timer1_Tick(object sender, EventArgs e)
 		{
-			CRec r = GetRec();
-			if (r == null)
-				return;
 			CMsg m = synMsg.GetMsg();
 			bBackup.Enabled = (fileList.Count > 0) && m.listFinished;
 			if (m.progress > 0)
@@ -454,9 +451,8 @@ namespace RapBackup
 					tssLast.Text = m.msg;
 					m.msg = String.Empty;
 					m.progress = 0;
-					BackupsLimit(r.name);
+					BackupsLimit(m.name);
 					synMsg.SetMsg(m);
-					RecToSettings(r);
 					lvBackups.Focus();
 				}
 				progressBar.Value = Convert.ToInt32(progressBar.Maximum * m.progress);
@@ -467,6 +463,9 @@ namespace RapBackup
 				m.msg = String.Empty;
 				synMsg.SetMsg(m);
 			}
+			CRec r = GetRec();
+			if (r == null)
+				return;
 			if (r.name != String.Empty)
 			{
 				if (m.listDone && !m.listFinished && (m.name == r.name) && (m.folder == r.folder))
