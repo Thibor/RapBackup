@@ -59,8 +59,7 @@
 			this.tssDate = new System.Windows.Forms.ToolStripStatusLabel();
 			this.tssSize = new System.Windows.Forms.ToolStripStatusLabel();
 			this.tssBackups = new System.Windows.Forms.ToolStripStatusLabel();
-			this.tssLast = new System.Windows.Forms.ToolStripStatusLabel();
-			this.tsslInfo = new System.Windows.Forms.ToolStripStatusLabel();
+			this.tssInfo = new System.Windows.Forms.ToolStripStatusLabel();
 			this.timer1 = new System.Windows.Forms.Timer(this.components);
 			this.panel1.SuspendLayout();
 			this.contextMenuStrip1.SuspendLayout();
@@ -311,8 +310,7 @@
             this.tssDate,
             this.tssSize,
             this.tssBackups,
-            this.tssLast,
-            this.tsslInfo});
+            this.tssInfo});
 			this.statusStrip.Location = new System.Drawing.Point(0, 425);
 			this.statusStrip.Name = "statusStrip";
 			this.statusStrip.Size = new System.Drawing.Size(800, 22);
@@ -334,17 +332,12 @@
 			this.tssBackups.Name = "tssBackups";
 			this.tssBackups.Size = new System.Drawing.Size(0, 17);
 			// 
-			// tssLast
+			// tssInfo
 			// 
-			this.tssLast.Name = "tssLast";
-			this.tssLast.Size = new System.Drawing.Size(0, 17);
-			// 
-			// tsslInfo
-			// 
-			this.tsslInfo.Font = new System.Drawing.Font("Segoe UI", 10F);
-			this.tsslInfo.ForeColor = System.Drawing.Color.DarkRed;
-			this.tsslInfo.Name = "tsslInfo";
-			this.tsslInfo.Size = new System.Drawing.Size(0, 17);
+			this.tssInfo.Font = new System.Drawing.Font("Segoe UI", 10F);
+			this.tssInfo.ForeColor = System.Drawing.Color.DarkRed;
+			this.tssInfo.Name = "tssInfo";
+			this.tssInfo.Size = new System.Drawing.Size(0, 17);
 			// 
 			// timer1
 			// 
@@ -410,13 +403,12 @@
 		private System.Windows.Forms.StatusStrip statusStrip;
 		private System.Windows.Forms.ToolStripStatusLabel tssDate;
 		private System.Windows.Forms.ToolStripStatusLabel tssBackups;
-		private System.Windows.Forms.ToolStripStatusLabel tsslInfo;
+		private System.Windows.Forms.ToolStripStatusLabel tssInfo;
 		private System.Windows.Forms.ContextMenuStrip contextMenuStrip2;
 		private System.Windows.Forms.ToolStripMenuItem checkAllToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem uncheckAllToolStripMenuItem;
 		private System.Windows.Forms.Timer timer1;
 		private System.Windows.Forms.ToolStripStatusLabel tssSize;
-		private System.Windows.Forms.ToolStripStatusLabel tssLast;
 	}
 }
 

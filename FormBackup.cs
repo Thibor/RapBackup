@@ -106,14 +106,14 @@ namespace RapBackup
 			DialogResult dr = MessageBox.Show($"Are you sure to delete {r.name}?", "Confirm Delete", MessageBoxButtons.YesNo);
 			if (dr != DialogResult.Yes)
 				return;
-			tsslInfo.Text = "Delete";
+			tssInfo.Text = "Delete";
 			recList.Remove(r);
 			recList.SaveToIni();
 			UpdateList();
 			timer.Stop();
 			TimeSpan ts = timer.Elapsed;
 			lvBackups_SelectedIndexChanged(null, null);
-			tsslInfo.Text = $"{r.name} deleted ({ts.TotalSeconds:N2})";
+			tssInfo.Text = $"{r.name} deleted ({ts.TotalSeconds:N2})";
 		}
 
 		void ClickNew()
@@ -127,14 +127,14 @@ namespace RapBackup
 		void ClickSave()
 		{
 			timer.Restart();
-			tsslInfo.Text= "Save";
+			tssInfo.Text= "Save";
 			CRec r = SettingsToRec();
 			r.SaveToIni();
 			ini.Save();
 			lvBackups.SelectedItems[0].Text = r.name;
 			timer.Stop();
 			TimeSpan ts = timer.Elapsed;
-			tsslInfo.Text = $"{r.name} saved ({ts.TotalSeconds:N2}s)";
+			tssInfo.Text = $"{r.name} saved ({ts.TotalSeconds:N2}s)";
 		}
 
 		CRec GetRec()
@@ -204,7 +204,7 @@ namespace RapBackup
 			tssDate.Text = dt == DateTime.MinValue ? string.Empty : dt.ToString("yyyy-MM-dd HH:mm:ss");
 			tssBackups.Text = $"Backups {cb}";
 			tssSize.Text = $"{size:N0}";
-			tsslInfo.Text = String.Empty;
+			tssInfo.Text = String.Empty;
 		}
 
 		void UpdateList()
@@ -446,7 +446,7 @@ namespace RapBackup
 			{
 				if (m.progress == 2)
 				{
-					tssLast.Text = m.msg;
+					tssInfo.Text = m.msg;
 					m.msg = String.Empty;
 					m.progress = 0;
 					BackupsLimit(m.name);
@@ -457,7 +457,7 @@ namespace RapBackup
 			}
 			if (m.msg != String.Empty)
 			{
-				tsslInfo.Text = m.msg;
+				tssInfo.Text = m.msg;
 				m.msg = String.Empty;
 				synMsg.SetMsg(m);
 			}
