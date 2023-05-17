@@ -6,6 +6,9 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using System.Threading.Tasks;
 using RapIni;
+using System.Xml.Linq;
+using System.Collections;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace RapBackup
 {
@@ -27,7 +30,7 @@ namespace RapBackup
 			InitializeComponent();
 			LoadFromIni();
 			recList.LoadFromIni();
-			UpdateList();
+			UpdateList(lastBackup);
 		}
 
 		void LoadFromIni()
@@ -54,7 +57,7 @@ namespace RapBackup
 			ClickBackup(r, fileList);
 		}
 
-		void BackupTask(CRec r,string dirDes, List<string> fl)
+		void BackupTask(CRec r, string dirDes, List<string> fl)
 		{
 			Stopwatch timer = new Stopwatch();
 			timer.Restart();
@@ -93,9 +96,18 @@ namespace RapBackup
 			sm.SetMsg(msg);
 		}
 
+		void ClickLvBackup()
+		{
+			lFolder.Text = String.Empty;
+			tbName.Text = String.Empty;
+			treeView.Nodes.Clear();
+			lvExt.Items.Clear();
+			RecToSettings();
+		}
+
 		async void ClickBackup(CRec r, List<string> fl)
 		{
-			await Task.Run(()=>BackupTask(r, FormOptions.Des, fl));
+			await Task.Run(() => BackupTask(r, FormOptions.Des, fl));
 		}
 
 		void ClickDelete()
@@ -112,7 +124,7 @@ namespace RapBackup
 			UpdateList();
 			timer.Stop();
 			TimeSpan ts = timer.Elapsed;
-			lvBackups_SelectedIndexChanged(null, null);
+			ClickLvBackup();
 			tssInfo.Text = $"{r.name} deleted ({ts.TotalSeconds:N2})";
 		}
 
@@ -127,14 +139,15 @@ namespace RapBackup
 		void ClickSave()
 		{
 			timer.Restart();
-			tssInfo.Text= "Save";
+			tssInfo.Text = "Save";
 			CRec r = SettingsToRec();
 			r.SaveToIni();
 			ini.Save();
-			lvBackups.SelectedItems[0].Text = r.name;
-			timer.Stop();
 			TimeSpan ts = timer.Elapsed;
 			tssInfo.Text = $"{r.name} saved ({ts.TotalSeconds:N2}s)";
+			recList.LoadFromIni();
+			UpdateList(r.name);
+			timer.Stop();
 		}
 
 		CRec GetRec()
@@ -207,12 +220,12 @@ namespace RapBackup
 			tssInfo.Text = String.Empty;
 		}
 
-		void UpdateList()
+		void UpdateList(string s="")
 		{
 			lvBackups.Items.Clear();
 			foreach (CRec r in recList)
 			{
-				ListViewItem lvItem = new ListViewItem(new[] { r.name }) { Selected = r.name == lastBackup };
+				ListViewItem lvItem = new ListViewItem(new[] { r.name }) { Selected = r.name == s };
 				lvBackups.Items.Add(lvItem);
 			}
 		}
@@ -365,7 +378,8 @@ namespace RapBackup
 				name = tbName.Text
 			};
 			r.dirList.Clear();
-			r.dirList = GetDirList(treeView.Nodes[0], String.Empty);
+			if (treeView.Nodes.Count > 0)
+				r.dirList = GetDirList(treeView.Nodes[0], String.Empty);
 			r.extList = GetCheckedExt();
 			return r;
 		}
@@ -378,21 +392,12 @@ namespace RapBackup
 			CRec r = new CRec(name) { folder = folder.Trim('\\') };
 			recList.Add(r);
 			recList.SaveToIni();
-			UpdateList();
+			UpdateList(name);
 		}
 
 		private void bNew_Click(object sender, EventArgs e)
 		{
 			ClickNew();
-		}
-
-		private void lvBackups_SelectedIndexChanged(object sender, EventArgs e)
-		{
-			lFolder.Text = String.Empty;
-			tbName.Text = String.Empty;
-			treeView.Nodes.Clear();
-			lvExt.Items.Clear();
-			RecToSettings();
 		}
 
 		private void treeView_AfterCheck(object sender, TreeViewEventArgs e)
@@ -497,12 +502,18 @@ namespace RapBackup
 				}
 
 			}
-			if(++timerCounter > 10)
+			if (++timerCounter > 10)
 			{
 				timerCounter = 0;
 				statusStrip.Update();
 			}
 
 		}//timer1_Tick
+
+		private void lvBackups_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			ClickLvBackup();
+		}
+
 	}
 }
