@@ -127,11 +127,6 @@ namespace RapBackup
 				CreateRec(folderBrowserDialog.SelectedPath);
 		}
 
-		/*void ClickSave()
-		{
-
-		}*/
-
 		void ClickSave()
 		{
 			timer.Restart();
