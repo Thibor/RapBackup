@@ -96,15 +96,6 @@ namespace RapBackup
 			sm.SetMsg(msg);
 		}
 
-		void ClickLvBackup()
-		{
-			lFolder.Text = String.Empty;
-			tbName.Text = String.Empty;
-			treeView.Nodes.Clear();
-			lvExt.Items.Clear();
-			RecToSettings();
-		}
-
 		async void ClickBackup(CRec r, List<string> fl)
 		{
 			await Task.Run(() => BackupTask(r, FormOptions.Des, fl));
@@ -124,7 +115,7 @@ namespace RapBackup
 			UpdateList();
 			timer.Stop();
 			TimeSpan ts = timer.Elapsed;
-			ClickLvBackup();
+			RecToSettings();
 			tssInfo.Text = $"{r.name} deleted ({ts.TotalSeconds:N2})";
 		}
 
@@ -136,17 +127,24 @@ namespace RapBackup
 				CreateRec(folderBrowserDialog.SelectedPath);
 		}
 
+		/*void ClickSave()
+		{
+
+		}*/
+
 		void ClickSave()
 		{
 			timer.Restart();
 			tssInfo.Text = "Save";
+			CRec rec = GetRec();
 			CRec r = SettingsToRec();
 			r.SaveToIni();
 			ini.Save();
 			TimeSpan ts = timer.Elapsed;
 			tssInfo.Text = $"{r.name} saved ({ts.TotalSeconds:N2}s)";
 			recList.LoadFromIni();
-			UpdateList(r.name);
+			if (rec.name != tbName.Text)
+				UpdateList(r.name);
 			timer.Stop();
 		}
 
@@ -220,7 +218,7 @@ namespace RapBackup
 			tssInfo.Text = String.Empty;
 		}
 
-		void UpdateList(string s="")
+		void UpdateList(string s = "")
 		{
 			lvBackups.Items.Clear();
 			foreach (CRec r in recList)
@@ -356,6 +354,10 @@ namespace RapBackup
 
 		void RecToSettings(CRec r)
 		{
+			lFolder.Text = String.Empty;
+			tbName.Text = String.Empty;
+			treeView.Nodes.Clear();
+			lvExt.Items.Clear();
 			if (r == null)
 				return;
 			lFolder.Text = r.folder;
@@ -512,7 +514,7 @@ namespace RapBackup
 
 		private void lvBackups_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			ClickLvBackup();
+			RecToSettings();
 		}
 
 	}
